@@ -61,7 +61,7 @@ RUN julia -e 'using DataPipeline'
 # Java Simple Model
 WORKDIR ${HOME}
 RUN git clone https://github.com/FAIRDataPipeline/javaSimpleModel.git
-RUN cd "${HOME}/javaSimpleModel"
+WORKDIR "${HOME}/javaSimpleModel"
 RUN gradle build
 
 # R Simple Model
@@ -81,10 +81,7 @@ RUN R -e 'cat(withr::with_libpaths(new="/opt/conda/lib/R/library", devtools::ins
 
 
 WORKDIR ${HOME}
-RUN chown -R jovyan cppSimpleModel
-RUN chown -R jovyan DataPipeline.jl
-RUN chown -R jovyan rSimpleModel
-RUN chown -R jovyan javaSimpleModel
 RUN chown -R jovyan /opt/julia/
-RUN chown -R jovyan /opt/conda/lib/R/library
+RUN chown -R jovyan /opt/conda/
+RUN chown -R jovyan /home/jovyan
 COPY ./Notebooks .
