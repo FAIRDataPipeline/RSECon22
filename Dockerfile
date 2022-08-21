@@ -1,4 +1,5 @@
-FROM jupyter/datascience-notebook:latest
+FROM jupyter/datascience-notebook:julia-1.7.3
+LABEL org.opencontainers.image.source="https://github.com/FAIRDataPipeline/RSECon22"
 USER root
 
 ARG FAIR_ENV
@@ -55,6 +56,7 @@ RUN git clone https://github.com/FAIRDataPipeline/DataPipeline.jl.git
 WORKDIR "${HOME}/DataPipeline.jl"
 #RUN julia -e 'using Pkg; Pkg.instantiate()'
 RUN julia -e 'using Pkg; Pkg.add("DataPipeline")'
+RUN julia -e 'import Pkg; Pkg.precompile()'
 RUN julia -e 'using DataPipeline'
 
 
