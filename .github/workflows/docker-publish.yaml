@@ -17,5 +17,4 @@ jobs:
       - name: Build and Publish Docker Image
         run: |
           docker build -t ghcr.io/fairdatapipeline/rsecon:latest .
-          docker run ghcr.io/fairdatapipeline/rsecon:latest
           docker push ghcr.io/fairdatapipeline/rsecon:latest
