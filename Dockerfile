@@ -54,10 +54,8 @@ RUN cmake --build build -j4
 WORKDIR ${HOME}
 RUN git clone https://github.com/FAIRDataPipeline/DataPipeline.jl.git
 WORKDIR "${HOME}/DataPipeline.jl"
-#RUN julia -e 'using Pkg; Pkg.instantiate()'
 RUN julia -e 'using Pkg; Pkg.add("DataPipeline")'
-RUN julia -e 'import Pkg; Pkg.precompile()'
-RUN julia -e 'using DataPipeline'
+RUN julia --project=examples/fdp -e 'using Pkg; Pkg.instantiate()'
 
 
 # Java Simple Model
