@@ -30,7 +30,7 @@ The docker container contains 8 Jupyter Notebooks detailed below.
 
 ## CLI and Registry Installation
 
-### fair_registry_install.ipynb
+### 1_registry_cli_install.ipynb
 This notebook contains codeblocks to install the FAIR Command Line Interface (CLI) and the FAIR Local Registry.
 
 ## Simple Models
@@ -38,28 +38,32 @@ The notebooks contain code blocks to run the SEIRS model example in different la
 
 All the models use the same input and therefor the  `pull` code block only needs to run from one of the files.
 
-### python_simple_model.ipynb
+### 2a_python.ipynb
 Code blocks to clone the simple model repo, install the simple model package, initalise a Fair repository, register ('pull') the inputs for the model and then 'run' the model in python.
 
-
-### julia_simple_model.ipynb
-Code blocks to initialise a fair repository, register ('pull') the inputs for the model and then 'run' the model in Julia. The Julia repository has been cloned into the docker container and the julia package has already been initialised.
-
-
-### cpp_simple_model.ipynb
+### 2b_cpp.ipynb
 Code blocks to initialise a fair repository, register ('pull') the inputs for the model and then 'run' the model in C++. The C++ repo has already been cloned and the executable has been compiled.
 
-### java_simple_model.ipynb
+### 2c_java.ipynb
 Code blocks to initialise a fair repository, register ('pull') the inputs for the model and then 'run' the model in JAVA. The Jave repo has already been cloned and the project pre built.
 
-### r_simple Model
+### 2d_julia.ipynb
+Code blocks to initialise a fair repository, register ('pull') the inputs for the model and then 'run' the model in Julia. The Julia repository has been cloned into the docker container and the julia package has already been initialised.
+
+### 2e_r.ipynb
 Code blocks to initialise a fair repository, register ('pull') the inputs for the model and then 'run' the model in R. The R repo has already been cloned and the R Package installed
 
 ## Comparison of the Simple Models
 The SEIRS models can be compared and graphed using the following notebook.
 
-### compare_models.ipynb
+### 3_comparison.ipynb
 Code block to `run` a comparison of the simple models producing a graph.
+
+## Explore the registry
+The local registry can be explored by running it and navigating to the web interface.
+
+### 4_start_registry
+Notebook to start and stop registry
 
 
 

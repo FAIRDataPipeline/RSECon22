@@ -81,7 +81,12 @@ RUN conda install -y -c conda-forge r-magick
 RUN conda install -y -c conda-forge glib
 RUN R -e 'cat(withr::with_libpaths(new="/opt/conda/lib/R/library", devtools::install_local() ) )'
 
+#Jupyter Iframe
+RUN conda install -c conda-forge jupyterlab_iframe
+RUN jupyter labextension install jupyterlab_iframe
+RUN jupyter serverextension enable --py jupyterlab_iframe
 
+# Permissiona
 WORKDIR ${HOME}
 RUN chown -R jovyan /opt/julia/
 RUN chown -R jovyan /opt/conda/
