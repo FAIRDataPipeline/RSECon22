@@ -87,7 +87,7 @@ RUN conda config --add channels pcgr && \
 RUN R -e 'cat(withr::with_libpaths(new="/opt/conda/lib/R/library", devtools::install_local() ) )'
 
 WORKDIR ${USER_HOME}
-COPY --chown=${NB_USER} ./Notebooks .
+COPY --chown=1000:100 ./Notebooks .
 
 # Permissiona
 RUN fix-permissions "${JULIA_PKGDIR}" && \
