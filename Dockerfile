@@ -34,7 +34,7 @@ RUN rm -r gradle-7.5 && \
 # Python Dependencies
 WORKDIR ${USER_HOME}/temp
 RUN wget https://raw.githubusercontent.com/FAIRDataPipeline/FAIR-CLI/develop/pyproject.toml && \
-    wget https://raw.githubusercontent.com/FAIRDataPipeline/data-registry/main/local-requirements.txt
+    wget https://raw.githubusercontent.com/FAIRDataPipeline/FAIR-CLI/develop/poetry.lock
 RUN mamba install --quiet --yes 'poetry' && \
     mamba clean --all -f -y
 RUN poetry config virtualenvs.create false \
