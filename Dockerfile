@@ -59,7 +59,8 @@ RUN cmake --build build -j4
 
 #Julia Simple Model
 WORKDIR "${USER_HOME}/DataPipeline.jl"
-RUN julia -e 'using Pkg; Pkg.instantiate()' && \
+RUN git checkout updated-deps && \
+    julia -e 'using Pkg; Pkg.instantiate()' && \
     julia --project=examples/fdp -e 'using Pkg; Pkg.instantiate()'
 
 # Java Simple Model
