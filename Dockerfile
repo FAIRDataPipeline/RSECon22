@@ -28,24 +28,20 @@ RUN wget https://services.gradle.org/distributions/gradle-7.5-bin.zip && \
     unzip gradle-*.zip
 RUN cp -pr gradle-*/* /usr/local
 RUN rm -r gradle-7.5 && \
-    rm gradle-7.5-bin.zip
+    rm gradle-7.5-bin.zip && \
+    mkdir temp
 
 # Python Dependencies
-RUN mkdir temp
 WORKDIR ${USER_HOME}/temp
-RUN wget https://raw.githubusercontent.com/FAIRDataPipeline/FAIR-CLI/develop/pyproject.toml
+RUN wget https://raw.githubusercontent.com/FAIRDataPipeline/FAIR-CLI/develop/pyproject.toml && \
+    wget https://raw.githubusercontent.com/FAIRDataPipeline/data-registry/main/local-requirements.txt
 RUN mamba install --quiet --yes 'poetry' && \
     mamba clean --all -f -y
 RUN poetry config virtualenvs.create false \
     && poetry install --no-root --no-interaction --no-ansi
-RUN rm pyproject.toml && \
-    rm poetry.lock
-RUN wget https://raw.githubusercontent.com/FAIRDataPipeline/data-registry/main/pyproject.toml
-RUN poetry install --no-root --no-interaction --no-ansi
-WORKDIR ${USER_HOME}
-RUN rm -r temp
 
 # Clone Repos and allow ambigous permissions
+WORKDIR ${USER_HOME}
 RUN git clone https://github.com/FAIRDataPipeline/cppSimpleModel.git && \
     git clone https://github.com/FAIRDataPipeline/DataPipeline.jl.git && \
     git clone https://github.com/FAIRDataPipeline/javaSimpleModel.git && \
@@ -54,7 +50,8 @@ RUN git clone https://github.com/FAIRDataPipeline/cppSimpleModel.git && \
     git config --global --add safe.directory ${USER_HOME}/cppSimpleModel && \
     git config --global --add safe.directory ${USER_HOME}/DataPipeline.jl && \
     git config --global --add safe.directory ${USER_HOME}/javaSimpleModel && \
-    git config --global --add safe.directory ${USER_HOME}/rSimpleModel
+    git config --global --add safe.directory ${USER_HOME}/rSimpleModel && \
+    rm -r temp
 
 # CPP Simple Model
 WORKDIR ${USER_HOME}/cppSimpleModel
@@ -87,7 +84,7 @@ RUN conda config --add channels pcgr && \
 RUN R -e 'cat(withr::with_libpaths(new="/opt/conda/lib/R/library", devtools::install_local() ) )'
 
 WORKDIR ${USER_HOME}
-COPY --chown=${NB_USER} ./Notebooks .
+COPY ./Notebooks .
 
 # Permissiona
 RUN fix-permissions "${JULIA_PKGDIR}" && \
