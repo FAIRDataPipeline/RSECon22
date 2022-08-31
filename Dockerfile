@@ -1,4 +1,4 @@
-FROM jupyter/datascience-notebook:julia-1.7.3
+FROM jupyter/datascience-notebook:aarch64-julia-1.7.3
 LABEL org.opencontainers.image.source="https://github.com/FAIRDataPipeline/RSECon22"
 USER root
 
