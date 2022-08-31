@@ -33,12 +33,12 @@ RUN rm -r gradle-7.5 && \
 
 # Python Dependencies
 WORKDIR ${USER_HOME}/temp
-RUN wget https://raw.githubusercontent.com/FAIRDataPipeline/FAIR-CLI/develop/pyproject.toml && \
-    wget https://raw.githubusercontent.com/FAIRDataPipeline/FAIR-CLI/develop/poetry.lock
+RUN wget https://raw.githubusercontent.com/FAIRDataPipeline/FAIR-CLI/develop/pyproject.toml
 RUN mamba install --quiet --yes 'poetry' && \
     mamba clean --all -f -y
 RUN poetry config virtualenvs.create false \
-    && poetry install --no-root --no-interaction --no-ansi
+    && poetry export -f requirements.txt > requirements.txt && \
+    /opt/conda/bin/python -m pip install -r requirements.txt
 
 # Clone Repos and allow ambigous permissions
 WORKDIR ${USER_HOME}
