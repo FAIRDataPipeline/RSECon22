@@ -75,10 +75,6 @@ RUN conda config --add channels pcgr && \
     'poppler' \
     'librsvg' \
     'glib' \
-    'bioconductor-rhdf5' \
-    'r-rsvg' \
-    'r-magick' \
-    'r-pdftools' \
     && \
     mamba clean --all -f -y
 RUN R -e 'cat(withr::with_libpaths(new="/opt/conda/lib/R/library", devtools::install_local() ) )'
