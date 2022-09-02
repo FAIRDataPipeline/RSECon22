@@ -7,6 +7,8 @@ jobs:
     steps:
       - uses: actions/checkout@v2
       - name: Set up QEMU
+        with:
+          platforms: arm64
         uses: docker/setup-qemu-action@v2
       - name: Set up Docker Buildx
         id: buildx
@@ -23,5 +25,5 @@ jobs:
           password: ${{ secrets.GITHUB_TOKEN }}
       - name: Build and Publish Docker Image
         run: |
-          docker build -t ghcr.io/fairdatapipeline/aarm64-rsecon:latest .
-          docker push ghcr.io/fairdatapipeline/aarm64-rsecon:latest
+          docker build -t ghcr.io/fairdatapipeline/rsecon:aarm64 .
+          docker push ghcr.io/fairdatapipeline/rsecon:aarm64

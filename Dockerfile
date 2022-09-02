@@ -21,7 +21,8 @@ RUN apt update && \
     libjsoncpp-dev \
     curl \
     libcurl4-openssl-dev \
-    libyaml-cpp-dev 
+    libyaml-cpp-dev \
+    imagemagick
 
 # Java
 RUN wget https://services.gradle.org/distributions/gradle-7.5-bin.zip && \
@@ -49,8 +50,7 @@ RUN git clone https://github.com/FAIRDataPipeline/cppSimpleModel.git && \
     git config --global --add safe.directory ${USER_HOME}/cppSimpleModel && \
     git config --global --add safe.directory ${USER_HOME}/DataPipeline.jl && \
     git config --global --add safe.directory ${USER_HOME}/javaSimpleModel && \
-    git config --global --add safe.directory ${USER_HOME}/rSimpleModel && \
-    rm -r temp
+    git config --global --add safe.directory ${USER_HOME}/rSimpleModel
 
 # CPP Simple Model
 WORKDIR ${USER_HOME}/cppSimpleModel
@@ -68,21 +68,36 @@ WORKDIR "${USER_HOME}/javaSimpleModel"
 RUN gradle build
 
 # R Simple Model
-WORKDIR ${USER_HOME}/rSimpleModel
+WORKDIR ${USER_HOME}/temp
 RUN conda config --add channels pcgr && \
+    conda config --add channels anaconda && \
     conda config --add channels bioconda && \
     mamba install --quiet --yes \
+    'pkg-config' \
+    'libcurl' \
     'poppler' \
     'librsvg' \
     'glib' \
+    'libgit2' \
     && \
     mamba clean --all -f -y
-RUN R -e 'cat(withr::with_libpaths(new="/opt/conda/lib/R/library", devtools::install_local() ) )'
+RUN wget https://imagemagick.org/archive/ImageMagick.tar.gz && \
+    tar xvzf ImageMagick.tar.gz && \
+    cd ImageMagick-* && \
+    ./configure --prefix=/opt/conda && \
+    make && \
+    make install
+WORKDIR ${USER_HOME}/rSimpleModel
+RUN echo 'options(stringsAsFactors = FALSE)' >> /opt/conda/lib/R/etc/Rprofile.site && \
+    R -e 'install.packages("magick", lib ="/opt/conda/lib/R/library", repos="https://cloud.r-project.org/", configure.vars="INCLUDE_DIR=/opt/conda/include/ImageMagick-7")' && \
+    R -e 'cat(withr::with_libpaths(new="/opt/conda/lib/R/library", devtools::install_local("/home/jovyan/rDataPipeline") ) )' && \
+    R -e 'cat(withr::with_libpaths(new="/opt/conda/lib/R/library", devtools::install_local() ) )'
 
 WORKDIR ${USER_HOME}
 COPY ./Notebooks .
 
 # Permissiona
-RUN fix-permissions "${JULIA_PKGDIR}" && \
+RUN rm -r temp && \
+    fix-permissions "${JULIA_PKGDIR}" && \
     fix-permissions "${CONDA_DIR}" && \
     fix-permissions "/home/${NB_USER}"
