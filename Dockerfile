@@ -1,4 +1,4 @@
-FROM jupyter/datascience-notebook:julia-1.7.3
+FROM jupyter/datascience-notebook:latest
 LABEL org.opencontainers.image.source="https://github.com/FAIRDataPipeline/RSECon22"
 USER root
 
@@ -44,6 +44,7 @@ RUN poetry config virtualenvs.create false \
 WORKDIR ${USER_HOME}
 RUN git clone https://github.com/FAIRDataPipeline/cppSimpleModel.git && \
     git clone https://github.com/FAIRDataPipeline/DataPipeline.jl.git && \
+    git clone https://github.com/FAIRDataPipeline/javaDataPipeline.git && \
     git clone https://github.com/FAIRDataPipeline/javaSimpleModel.git && \
     git clone https://github.com/FAIRDataPipeline/rSimpleModel.git && \
     git clone https://github.com/FAIRDataPipeline/rDataPipeline.git && \
@@ -60,12 +61,21 @@ RUN cmake --build build -j4
 
 #Julia Simple Model
 WORKDIR "${USER_HOME}/DataPipeline.jl"
-RUN julia -e 'using Pkg; Pkg.instantiate()' && \
+RUN git checkout updated-deps && \
+    julia -e 'using Pkg; Pkg.instantiate()' && \
     julia --project=examples/fdp -e 'using Pkg; Pkg.instantiate()'
+
+# Java Data Pipeline
+WORKDIR "${USER_HOME}/javaDataPipeline"
+RUN git checkout ro-crate-fix && \
+    gradle clean && \
+    gradle build
 
 # Java Simple Model
 WORKDIR "${USER_HOME}/javaSimpleModel"
-RUN gradle build
+RUN git checkout local_deps && \
+    gradle clean && \
+    gradle build
 
 # R Simple Model
 WORKDIR ${USER_HOME}/rSimpleModel
