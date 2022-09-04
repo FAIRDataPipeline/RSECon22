@@ -6,7 +6,7 @@ This repo contains the material for the RSECon22 walkthrough titled: [*"A FAIR D
 The only prerequisite is an installation of Docker, which is available free from [docker.com](https://www.docker.com/).
 
 ## Running the Docker Container
-The docker container is available on the GitHub package registry and can be pulled using the following command(s):
+The docker container is available on the GitHub Package Registry and can be pulled using the following command(s):
 
 ### AMD64
 ```
