@@ -25,9 +25,9 @@ RUN apt update && \
 
 # Java
 RUN wget https://services.gradle.org/distributions/gradle-7.5-bin.zip && \
-    unzip gradle-*.zip
-RUN cp -pr gradle-*/* /usr/local
-RUN rm -r gradle-7.5 && \
+    unzip gradle-*.zip && \
+    cp -pr gradle-*/* /usr/local && \
+    rm -r gradle-7.5 && \
     rm gradle-7.5-bin.zip && \
     mkdir temp
 
@@ -56,14 +56,15 @@ RUN git clone https://github.com/FAIRDataPipeline/cppSimpleModel.git && \
 
 # CPP Simple Model
 WORKDIR ${USER_HOME}/cppSimpleModel
-RUN cmake -Bbuild
-RUN cmake --build build -j4
+RUN cmake -Bbuild && \
+    cmake --build build -j4
 
 #Julia Simple Model
 WORKDIR "${USER_HOME}/DataPipeline.jl"
 RUN git checkout updated-deps && \
     julia -e 'using Pkg; Pkg.instantiate()' && \
-    julia --project=examples/fdp -e 'using Pkg; Pkg.instantiate()'
+    julia --project=examples/fdp -e 'using Pkg; Pkg.instantiate()' && \
+    julia --project=examples/fdp -e 'using Pkg; Pkg.precompile()'
 
 # Java Data Pipeline
 WORKDIR "${USER_HOME}/javaDataPipeline"
