@@ -34,11 +34,13 @@ RUN wget https://services.gradle.org/distributions/gradle-7.5-bin.zip && \
 # Python Dependencies
 WORKDIR ${USER_HOME}/temp
 RUN wget https://raw.githubusercontent.com/FAIRDataPipeline/FAIR-CLI/develop/pyproject.toml && \
-    wget https://raw.githubusercontent.com/FAIRDataPipeline/FAIR-CLI/develop/poetry.lock
-RUN mamba install --quiet --yes 'poetry' && \
+    wget https://raw.githubusercontent.com/FAIRDataPipeline/FAIR-CLI/develop/poetry.lock && \
+    wget https://raw.githubusercontent.com/FAIRDataPipeline/data-registry/ro_crate/local-requirements.txt && \
+    mamba install --quiet --yes 'poetry' && \
     mamba clean --all -f -y
 RUN poetry config virtualenvs.create false \
-    && poetry install --no-root --no-interaction --no-ansi
+    && poetry install --no-root --no-interaction --no-ansi && \
+    /opt/conda/bin/python -m pip install -r local-requirements.txt
 
 # Clone Repos and allow ambigous permissions
 WORKDIR ${USER_HOME}
@@ -52,6 +54,7 @@ RUN git clone https://github.com/FAIRDataPipeline/cppSimpleModel.git && \
     git config --global --add safe.directory ${USER_HOME}/DataPipeline.jl && \
     git config --global --add safe.directory ${USER_HOME}/javaSimpleModel && \
     git config --global --add safe.directory ${USER_HOME}/rSimpleModel && \
+    git config --global --add safe.directory ${USER_HOME}/DataPipeline.jl && \
     rm -r temp
 
 # CPP Simple Model
