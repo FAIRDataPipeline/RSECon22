@@ -1,5 +1,5 @@
 name: Publish Docker Container
-on: [push]
+on: #[push]
 jobs:
   Build:
     name: Create and Push Docker Container
