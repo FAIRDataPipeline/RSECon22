@@ -1,23 +1,36 @@
-# RSECon22 Walktrhough: A FAIR Data Pipeline: provenance-driven data management for traceable scientific workflows
+# RSECon22 Walkthrough: A FAIR Data Pipeline: provenance-driven data management for traceable scientific workflows
 
-This repo contains the material for the RSECon22 walkthrough titled: A FAIR Data Pipeline: provenance-driven data management for traceable scientific workflows. The walkthrough uses a docker containter an Jupyter Labs (formally notebook) to run through an example usage of the FAIR DataPipeline.
+This repo contains the material for the RSECon22 walkthrough titled: [*"A FAIR Data Pipeline: provenance-driven data management for traceable scientific workflows"*](https://virtual.oxfordabstracts.com/#/event/public/3101/submission/113). The walkthrough uses a docker container and Jupyter Labs (formally, a notebook) to run through an example usage of the [FAIR Data Pipeline](https://www.fairdatapipeline.org/).
 
 ## Prerequisites
-The only prerequisite is an installation of Docker, Docker is available free from [docker.com](https://www.docker.com/).
+The only prerequisite is an installation of Docker, which is available free from [docker.com](https://www.docker.com/).
 
 ## Running the Docker Container
-The docker container is available on the GitHub Registry and can be pulled using the following command:
+The docker container is available on the GitHub Package Registry and can be pulled using the following command(s):
 
+### AMD64
 ```
 docker pull ghcr.io/fairdatapipeline/rsecon:latest
+```
+
+### ARM64
+```
+docker pull ghcr.io/fairdatapipeline/rsecon:aarm64
 ```
 
 The container can then be run using the following command:
 
 ```
-docker run -p 8000:8000 -p 8888:8888
+docker run -p 8000:8000 -p 8888:8888 ghcr.io/fairdatapipeline/rsecon:latest
 ```
-Once the container has started, there will be an address to access the Jupyter Lab within the console, this address with include a token for authentication to the Jupyter Labs page. The link will take the form of: `http://127.0.0.1:8888/lab?token=<token>`.
+
+OR
+
+```
+docker run -p 8000:8000 -p 8888:8888 ghcr.io/fairdatapipeline/rsecon:aarm64
+```
+
+Once the container has started, there will be an address to access the Jupyter Lab within the console. This address will include a token for authentication to the Jupyter Labs page. The link will take the form of: `http://127.0.0.1:8888/lab?token=<token>`.
 
 This address can then be accessed through your web browser to give you access to the Jupyter Lab installation.
 
@@ -34,7 +47,7 @@ The docker container contains 8 Jupyter Notebooks detailed below.
 This notebook contains codeblocks to install the FAIR Command Line Interface (CLI) and the FAIR Local Registry.
 
 ## Simple Models
-The notebooks contain code blocks to run the SEIRS model example in different languages, they contain code to `register` inputs and `run` the models.
+The notebooks contain code blocks to run the SEIRS model example in different languages: they contain code to `register` inputs and `run` the models.
 
 All the models use the same input and therefor the  `pull` code block only needs to run from one of the files.
 
@@ -60,11 +73,7 @@ The SEIRS models can be compared and graphed using the following notebook.
 Code block to `run` a comparison of the simple models producing a graph.
 
 ## Explore the registry
-The local registry can be explored by running it and navigating to the web interface.
+The local registry can be explored by running it and navigating to the web interface at: `127.0.0.1:8000`
 
 ### 4_start_registry
 Notebook to start and stop registry
-
-
-
-
