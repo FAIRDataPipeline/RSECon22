@@ -34,13 +34,11 @@ RUN wget https://services.gradle.org/distributions/gradle-7.5-bin.zip && \
 # Python Dependencies
 WORKDIR ${USER_HOME}/temp
 RUN wget https://raw.githubusercontent.com/FAIRDataPipeline/FAIR-CLI/develop/pyproject.toml && \
-    wget https://raw.githubusercontent.com/FAIRDataPipeline/FAIR-CLI/develop/poetry.lock && \
-    wget https://raw.githubusercontent.com/FAIRDataPipeline/data-registry/ro_crate/local-requirements.txt && \
+    wget https://raw.githubusercontent.com/FAIRDataPipeline/FAIR-CLI/develop/poetry.lock
     mamba install --quiet --yes 'poetry' && \
     mamba clean --all -f -y
 RUN poetry config virtualenvs.create false \
-    && poetry install --no-root --no-interaction --no-ansi && \
-    /opt/conda/bin/python -m pip install -r local-requirements.txt
+    && poetry install --no-root --no-interaction --no-ansi
 
 # Clone Repos and allow ambigous permissions
 WORKDIR ${USER_HOME}
