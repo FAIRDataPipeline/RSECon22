@@ -1,4 +1,4 @@
-FROM jupyter/datascience-notebook:julia-1.7.3
+FROM jupyter/datascience-notebook:latest
 LABEL org.opencontainers.image.source="https://github.com/FAIRDataPipeline/RSECon22"
 USER root
 
@@ -25,17 +25,17 @@ RUN apt update && \
 
 # Java
 RUN wget https://services.gradle.org/distributions/gradle-7.5-bin.zip && \
-    unzip gradle-*.zip
-RUN cp -pr gradle-*/* /usr/local
-RUN rm -r gradle-7.5 && \
+    unzip gradle-*.zip && \
+    cp -pr gradle-*/* /usr/local && \
+    rm -r gradle-7.5 && \
     rm gradle-7.5-bin.zip && \
     mkdir temp
 
 # Python Dependencies
 WORKDIR ${USER_HOME}/temp
 RUN wget https://raw.githubusercontent.com/FAIRDataPipeline/FAIR-CLI/develop/pyproject.toml && \
-    wget https://raw.githubusercontent.com/FAIRDataPipeline/FAIR-CLI/develop/poetry.lock
-RUN mamba install --quiet --yes 'poetry' && \
+    wget https://raw.githubusercontent.com/FAIRDataPipeline/FAIR-CLI/develop/poetry.lock && \
+    mamba install --quiet --yes 'poetry' && \
     mamba clean --all -f -y
 RUN poetry config virtualenvs.create false \
     && poetry install --no-root --no-interaction --no-ansi
@@ -44,6 +44,7 @@ RUN poetry config virtualenvs.create false \
 WORKDIR ${USER_HOME}
 RUN git clone https://github.com/FAIRDataPipeline/cppSimpleModel.git && \
     git clone https://github.com/FAIRDataPipeline/DataPipeline.jl.git && \
+    git clone https://github.com/FAIRDataPipeline/javaDataPipeline.git && \
     git clone https://github.com/FAIRDataPipeline/javaSimpleModel.git && \
     git clone https://github.com/FAIRDataPipeline/rSimpleModel.git && \
     git clone https://github.com/FAIRDataPipeline/rDataPipeline.git && \
@@ -51,21 +52,32 @@ RUN git clone https://github.com/FAIRDataPipeline/cppSimpleModel.git && \
     git config --global --add safe.directory ${USER_HOME}/DataPipeline.jl && \
     git config --global --add safe.directory ${USER_HOME}/javaSimpleModel && \
     git config --global --add safe.directory ${USER_HOME}/rSimpleModel && \
+    git config --global --add safe.directory ${USER_HOME}/DataPipeline.jl && \
     rm -r temp
 
 # CPP Simple Model
 WORKDIR ${USER_HOME}/cppSimpleModel
-RUN cmake -Bbuild
-RUN cmake --build build -j4
+RUN cmake -Bbuild && \
+    cmake --build build -j4
 
 #Julia Simple Model
 WORKDIR "${USER_HOME}/DataPipeline.jl"
-RUN julia -e 'using Pkg; Pkg.instantiate()' && \
-    julia --project=examples/fdp -e 'using Pkg; Pkg.instantiate()'
+RUN git checkout updated-deps && \
+    julia -e 'using Pkg; Pkg.instantiate()' && \
+    julia --project=examples/fdp -e 'using Pkg; Pkg.instantiate()' && \
+    julia --project=examples/fdp -e 'using Pkg; Pkg.precompile()'
+
+# Java Data Pipeline
+WORKDIR "${USER_HOME}/javaDataPipeline"
+RUN git checkout ro-crate-fix && \
+    gradle clean && \
+    gradle build
 
 # Java Simple Model
 WORKDIR "${USER_HOME}/javaSimpleModel"
-RUN gradle build
+RUN git checkout local_deps && \
+    gradle clean && \
+    gradle build
 
 # R Simple Model
 WORKDIR ${USER_HOME}/rSimpleModel
