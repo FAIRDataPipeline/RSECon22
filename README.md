@@ -1,6 +1,6 @@
 # RSECon22 Walkthrough: A FAIR Data Pipeline: provenance-driven data management for traceable scientific workflows
 
-This repo contains the material for the RSECon22 walkthrough titled: [*"A FAIR Data Pipeline: provenance-driven data management for traceable scientific workflows"*](https://virtual.oxfordabstracts.com/#/event/public/3101/submission/113). The walkthrough uses a docker container and Jupyter Labs (formally, a notebook) to run through an example usage of the [FAIR Data Pipeline](https://www.fairdatapipeline.org/).
+This repo contains the material for the RSECon22 walkthrough titled: [*"A FAIR Data Pipeline: provenance-driven data management for traceable scientific workflows"*](https://virtual.oxfordabstracts.com/#/event/public/3101/submission/113). The walkthrough uses a docker container and Jupyter Labs (formally, a notebook) to run through an example usage of the [FAIR Data Pipeline](https://www.fairdatapipeline.org/). You can view the walkthrough presentation in the [Society of Research Software Engineering channel](https://www.youtube.com/watch?v=IZWpmIOhuz0).
 
 ## Prerequisites
 The only prerequisite is an installation of Docker, which is available free from [docker.com](https://www.docker.com/).
